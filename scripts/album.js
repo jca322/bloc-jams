@@ -28,6 +28,21 @@ var albumMarconi = {
     ]
 };
 
+var albumRiseAgainst = {
+    title: 'Endgame',
+    artist: 'Rise Against',
+    label: 'DGC Records',
+    year: '2011',
+    albumArtUrl: 'assets/images/album_covers/03.png',
+    songs: [
+        { title: 'Architects', duration: '3:43' },
+        { title: 'Help Is on the Way', duration: '3:54' },
+        { title: 'Make It Stop', duration: '3:55' },
+        { title: 'Disparity by Design', duration: '3:49' },
+        { title: 'Satellite', duration: '3:59' },
+    ]
+};
+
 var createSongRow = function(songNumber, songName, songLength) {
     var template = 
         '<tr class="album-view-song-item">'
@@ -61,3 +76,16 @@ var setCurrentAlbum = function(album) {
 window.onload = function() {
     setCurrentAlbum(albumPicasso);
 };
+
+var albumArray = [albumPicasso, albumMarconi, albumRiseAgainst];
+var currentAlbumIndex = 0;
+
+function albumToggle(index) {
+    currentAlbumIndex++;
+    if (currentAlbumIndex === albumArray.length) {
+        currentAlbumIndex = 0;
+    }
+    setCurrentAlbum(albumArray[currentAlbumIndex]);    
+}
+
+document.getElementsByClassName("album-cover-art")[0].addEventListener("click", albumToggle);
