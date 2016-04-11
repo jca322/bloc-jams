@@ -79,43 +79,32 @@ var trackIndex = function(album, song) {
     return album.songs.indexOf(song);
 };
 
-var nextSong = function() {
-    //know what previous song is
-    var getLastSongNumber = function(index) {
+var nextPrevSong = function(x) {
+    if (x === 1) {
+       //know what previous song is
+        var getLastSongNumber = function(index) {
         return index == 0 ? currentAlbum.songs.length : index;
-    };
+        };
     
-    var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
-    currentSongIndex++;
+        var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
+        currentSongIndex++;
     
-    if (currentSongIndex >= currentAlbum.songs.length) {
-        currentSongIndex = 0;
-    }
-    
-    // set new current song
-    setSong(currentSongIndex + 1);
-    
-    // update player bar
-    updatePlayerBarSong();
-    
-    var lastSongNumber = getLastSongNumber(currentSongIndex);
-    var $nextSongNumberCell = $getSongNumberCell(currentlyPlayingSongNumber);
-    var $lastSongNumberCell = $getSongNumberCell(lastSongNumber);
-    
-    $nextSongNumberCell.html(pauseButtonTemplate);
-    $lastSongNumberCell.html(lastSongNumber);
-};
-
-var previousSong = function() {
-    var getLastSongNumber = function(index) {
+        if (currentSongIndex >= currentAlbum.songs.length) {
+            currentSongIndex = 0;
+        }
+    } else if (x === -1) {
+        var getLastSongNumber = function(index) {
         return index == (currentAlbum.songs.length - 1) ? 1 : index + 2;
-    };
+        };
+  
+        var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
+        currentSongIndex--;
     
-    var currentSongIndex = trackIndex(currentAlbum, currentSongFromAlbum);
-    currentSongIndex--;
-    
-    if (currentSongIndex < 0) {
-        currentSongIndex = currentAlbum.songs.length - 1;
+        if (currentSongIndex < 0) {
+            currentSongIndex = currentAlbum.songs.length - 1;
+        }
+    } else {
+        throw new Error("nextPrevSong() function only accepts parameters of 1 or -1");
     }
     
     // set new current song
@@ -168,6 +157,10 @@ var $getSongNumberCell = function(number) {
 
 $(document).ready(function() {
     setCurrentAlbum(albumPicasso);
-    $previousButton.click(previousSong);
-    $nextButton.click(nextSong);
+    $previousButton.click(function(){
+        nextPrevSong(-1);
+    });
+    $nextButton.click(function() {
+        nextPrevSong(1);
+    });
 });
